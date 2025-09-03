@@ -1,0 +1,101 @@
+🎯 Objectif Créer une application web moderne, intuitive et autonome, pour la gestion des étudiants, des paiements et du suivi administratif dans un institut linguistique, hébergeable sur GitHub Pages sans serveur ni backend. L'application doit :
+* Fonctionner hors ligne (grâce au cache + IndexedDB)
+* Être 100% autonome, sans dépendance à un serveur ou à Replit
+* Utiliser uniquement HTML5, CSS3, JavaScript pur (ES6+)
+* Stocker les données localement de façon persistante avec IndexedDB
+* Être hébergeable statiquement sur GitHub Pages
+🔧 Technologies imposées
+* Frontend uniquement : HTML, CSS, JavaScript (sans framework, sans TypeScript)
+* Stockage local : IndexedDB (base de données locale côté navigateur)
+* Aucune technologie backend requise
+* Hébergement : GitHub Pages (ou tout serveur de fichiers statiques)
+🖥 Interface Utilisateur (UI/UX) ✅ Design
+* Application Web Responsive (desktop + mobile)
+* Design moderne et épuré
+* Icônes personnalisées
+* Palette de couleurs cohérentes avec le thème
+* Logo I.L.C Institut de langues et de communication avec les drapeaux de la Guinée 🇬🇳 et de l’Allemagne 🇩🇪
+🏠 Page d’accueil Affiche 4 grandes icônes cliquables :
+1. Inscription
+2. Étudiants
+3. Paiement
+4. Suivi
+👤 Gestion des Étudiants 🔹 Inscription Formulaire avec les champs :
+* Nom
+* Prénom
+* Date de naissance
+* Classe (A1, A2, B1, B2)
+* Photo (upload local)
+* Frais d’inscription payés
+🔹 Génération d’un ID étudiant Format : ILC-[CLASSE]-[PRENOM]-[4 DERNIERS CHIFFRES DU TIMESTAMP]
+🔹 Classement automatique Chaque étudiant est classé automatiquement selon la classe choisie.
+🔹 Section Étudiants Affiche les étudiants par classe avec :
+* Détails complets
+* Boutons : Modifier / Supprimer
+💳 Gestion des Paiements 🔹 Formulaire de paiement Champs :
+* Étudiant concerné
+* Montant (GNF)
+* Mois payé (Janvier à Décembre)
+* Motif du paiement
+* Date du paiement
+📊 Suivi 📌 Événements récents Fil d’activités (inscriptions / paiements récents)
+📈 Revenu
+* Total cumulé
+* Revenu mensuel
+🔍 Recherche avancée Recherche par :
+* Nom
+* Prénom
+* ID ILC
+⚙️ Paramètres 🌐 Langue (multilingue)
+* Français, Anglais, Allemand
+🎨 Thème
+* Thème clair (par défaut)
+* Thème sombre
+🔔 Notifications
+* Activer / Désactiver
+📖 À propos Texte : Application créée par Sharawi On The Line Version : v1.0
+
+🗃 Base de données locale (via IndexedDB)
+🧾 Table : students
+Champ	Type	Description
+id	STRING	ID unique (ex : ILCA1MO2345)
+firstName	STRING	Prénom
+lastName	STRING	Nom
+birthDate	STRING	Date de naissance (format ISO ou JJ/MM/AAAA)
+classe	STRING	A1 / A2 / B1 / B2
+photo	STRING	Image encodée en base64
+inscriptionFee	NUMBER	Montant payé (frais d’inscription)
+createdAt	STRING	Date d’inscription (timestamp ISO)
+🧾 Table : payments
+Champ	Type	Description
+id	STRING	ID unique du paiement
+studentId	STRING	Référence à students.id
+amount	NUMBER	Montant payé (GNF)
+date	STRING	Date du paiement (format ISO)
+reason	STRING	Motif du paiement
+month	STRING	Mois concerné (ex : "Janvier")
+createdAt	STRING	Date d'enregistrement du paiement
+🧾 Table : settings
+Champ	Type	Valeurs possibles
+language	STRING	'fr', 'en', 'de'
+theme	STRING	'light', 'dark'
+notifications	BOOLEAN	true ou false (1 ou 0 acceptés également)
+✅ Fonctionnalités bonus à intégrer
+* Fonctionnement hors ligne : via Service Worker + IndexedDB
+* Interface propre : sans duplication des boutons
+* Transitions douces, icônes SVG, images optimisées
+* Navigation fluide : sans rechargement complet (Fetch / DOM)
+* Fichiers organisés proprement
+* Sauvegarde d'image : encodée en base64 pour éviter dépendance externe
+
+
+❌ Note : manifest.json a été supprimé volontairement. L'application reste fonctionnelle en PWA avec Service Worker, mais certaines fonctionnalités comme l'installation sur écran d'accueil auront des limitations sans manifest.
+
+📌 Notes importantes
+* Pas de Node.js ni Express : uniquement frontend
+* Données stockées de manière persistante dans le navigateur (IndexedDB)
+* Application PWA : installable et fonctionnelle même sans connexion
+* Peut être hébergée sur GitHub Pages ou tout serveur de fichiers statiques.
+* Les données doivent être stockées dans IndexedDB et conservées de manière permanente même après fermeture et réouverture de l’application.
+
+
