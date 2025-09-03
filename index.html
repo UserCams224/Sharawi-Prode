@@ -1,0 +1,3379 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I.L.C Institut - Gestion des Étudiants</title>
+    <meta name="description" content="Système de gestion des étudiants pour I.L.C Institut de langues et de communication">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#2563eb">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="I.L.C Institut">
+    
+    <style>
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    line-height: 1.6;
+    color: var(--text-primary);
+    background-color: var(--bg-primary);
+    transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+/* Layout */
+.app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+.header {
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-light);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 70px;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.logo {
+    width: 50px;
+    height: 50px;
+}
+
+.logo-text h1 {
+    font-size: 1.5rem;
+    color: var(--primary);
+    margin-bottom: 0.25rem;
+}
+
+.logo-text p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+/* Navigation */
+.nav {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.nav-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.nav-btn:hover,
+.nav-btn.active {
+    background: var(--primary);
+    color: white;
+}
+
+/* Header Actions */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.icon-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: transparent;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.icon-btn:hover {
+    background: var(--bg-hover);
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    width: 100%;
+}
+
+/* Pages */
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+.page-header {
+    margin-bottom: 2rem;
+}
+
+.page-header h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.page-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+/* Search */
+.search-container {
+    position: relative;
+    flex: 1;
+    max-width: 400px;
+}
+
+.search-container input {
+    width: 100%;
+    padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+    border: 1px solid var(--border-light);
+    border-radius: 0.5rem;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    transition: border-color 0.3s ease;
+}
+
+.search-container input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.search-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.875rem;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+}
+
+.btn-secondary {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-light);
+}
+
+.btn-secondary:hover {
+    background: var(--bg-hover);
+}
+
+.btn-danger {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-danger:hover {
+    background: var(--danger-dark);
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: var(--bg-secondary);
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 0.5rem;
+    background: var(--primary-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat-icon .icon {
+    width: 24px;
+    height: 24px;
+    color: var(--primary);
+}
+
+.stat-content h3 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.stat-content p {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+/* Dashboard Grid */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.quick-actions,
+.recent-activities {
+    background: var(--bg-secondary);
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--border-light);
+}
+
+.quick-actions h3,
+.recent-activities h3 {
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-light);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+    color: var(--text-primary);
+}
+
+.action-btn:hover {
+    background: var(--bg-hover);
+    border-color: var(--primary);
+}
+
+/* Activities */
+.activities-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.activity-item {
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--primary-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.activity-icon .icon {
+    width: 16px;
+    height: 16px;
+    color: var(--primary);
+}
+
+.activity-content {
+    flex: 1;
+}
+
+.activity-content p {
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.activity-content span {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+/* Class Tabs */
+.class-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.tab-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-light);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.tab-btn:hover,
+.tab-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+/* Students Grid */
+.students-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.student-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-light);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.student-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.student-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.student-photo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--bg-primary);
+    border: 2px solid var(--border-light);
+}
+
+.student-info h3 {
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.student-info .student-id {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-family: monospace;
+}
+
+.student-details {
+    margin-bottom: 1rem;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.detail-row:last-child {
+    margin-bottom: 0;
+}
+
+.detail-label {
+    color: var(--text-secondary);
+}
+
+.detail-value {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.class-badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    background: var(--primary);
+    color: white;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.student-actions {
+    display: flex;
+    gap: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-light);
+}
+
+.btn-small {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+}
+
+/* Payments Table */
+.payments-filters {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.payments-filters select {
+    padding: 0.75rem;
+    border: 1px solid var(--border-light);
+    border-radius: 0.5rem;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    min-width: 150px;
+}
+
+.payments-table {
+    background: var(--bg-secondary);
+    border-radius: 0.75rem;
+    border: 1px solid var(--border-light);
+    overflow: hidden;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.table th {
+    background: var(--bg-primary);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.table td {
+    color: var(--text-primary);
+}
+
+.table tr:last-child td {
+    border-bottom: none;
+}
+
+.table tr:hover {
+    background: var(--bg-hover);
+}
+
+/* Settings */
+.settings-grid {
+    display: grid;
+    gap: 2rem;
+    max-width: 600px;
+}
+
+.setting-section {
+    background: var(--bg-secondary);
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--border-light);
+}
+
+.setting-section h3 {
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.setting-section select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-light);
+    border-radius: 0.5rem;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 0.875rem;
+}
+
+.theme-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.radio-option input {
+    margin: 0;
+}
+
+/* Switch */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--border-light);
+    transition: 0.3s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.about-content {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.about-content p {
+    margin-bottom: 0.5rem;
+}
+
+/* Modals */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: var(--bg-secondary);
+    border-radius: 0.75rem;
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.modal-header h3 {
+    color: var(--text-primary);
+}
+
+.close-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-btn:hover {
+    background: var(--bg-hover);
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-light);
+}
+
+/* Forms */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-light);
+    border-radius: 0.5rem;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.photo-preview {
+    margin-top: 0.75rem;
+    text-align: center;
+}
+
+.photo-preview img {
+    max-width: 150px;
+    max-height: 150px;
+    border-radius: 0.5rem;
+    border: 2px solid var(--border-light);
+}
+
+/* Toast Notifications */
+.toast-container {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.toast {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-light);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    min-width: 300px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    animation: slideIn 0.3s ease;
+}
+
+.toast.success {
+    border-color: var(--success);
+}
+
+.toast.error {
+    border-color: var(--danger);
+}
+
+.toast.warning {
+    border-color: var(--warning);
+}
+
+.toast-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.toast.success .toast-icon {
+    color: var(--success);
+}
+
+.toast.error .toast-icon {
+    color: var(--danger);
+}
+
+.toast.warning .toast-icon {
+    color: var(--warning);
+}
+
+.toast-content {
+    flex: 1;
+    color: var(--text-primary);
+    font-size: 0.875rem;
+}
+
+.toast-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-secondary);
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-secondary);
+}
+
+.empty-state .empty-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 1rem;
+    opacity: 0.5;
+}
+
+.empty-state h3 {
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.empty-state p {
+    margin-bottom: 1.5rem;
+}
+
+/* Light Theme (Default) */
+.light-theme {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --primary-light: #dbeafe;
+    --secondary: #64748b;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --danger-dark: #dc2626;
+    
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-hover: #f1f5f9;
+    
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    
+    --border-light: #e2e8f0;
+    --border-medium: #cbd5e1;
+    
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark Theme */
+.dark-theme {
+    --primary: #3b82f6;
+    --primary-dark: #2563eb;
+    --primary-light: #1e3a8a;
+    --secondary: #94a3b8;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --danger-dark: #dc2626;
+    
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-hover: #334155;
+    
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    
+    --border-light: #334155;
+    --border-medium: #475569;
+    
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+}
+
+.dark-theme .modal {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.dark-theme .student-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.dark-theme .toast {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Theme transition */
+* {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.dark-theme .icon {
+    filter: brightness(1.1);
+}
+
+.dark-theme ::-webkit-scrollbar {
+    width: 8px;
+}
+
+.dark-theme ::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+}
+
+.dark-theme ::-webkit-scrollbar-thumb {
+    background: var(--border-light);
+    border-radius: 4px;
+}
+
+.dark-theme ::-webkit-scrollbar-thumb:hover {
+    background: var(--border-medium);
+}
+
+.light-theme ::-webkit-scrollbar {
+    width: 8px;
+}
+
+.light-theme ::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+}
+
+.light-theme ::-webkit-scrollbar-thumb {
+    background: var(--border-light);
+    border-radius: 4px;
+}
+
+.light-theme ::-webkit-scrollbar-thumb:hover {
+    background: var(--border-medium);
+}
+
+.light-theme *:focus-visible,
+.dark-theme *:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+.light-theme ::selection {
+    background: var(--primary-light);
+    color: var(--primary);
+}
+
+.dark-theme ::selection {
+    background: var(--primary);
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        gap: 1rem;
+        height: auto;
+        padding: 1rem;
+    }
+
+    .nav {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .header-actions {
+        order: 2;
+    }
+
+    .main-content {
+        padding: 1rem;
+    }
+
+    .page-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-container {
+        max-width: none;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .students-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 1rem;
+    }
+
+    .modal-actions {
+        flex-direction: column;
+    }
+
+    .payments-filters {
+        flex-direction: column;
+    }
+
+    .payments-filters select {
+        min-width: auto;
+    }
+
+    .table {
+        font-size: 0.875rem;
+    }
+
+    .table th,
+    .table td {
+        padding: 0.75rem 0.5rem;
+    }
+
+    .toast-container {
+        left: 1rem;
+        right: 1rem;
+    }
+
+    .toast {
+        min-width: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .nav {
+        flex-wrap: wrap;
+        gap: 0.25rem;
+    }
+
+    .nav-btn {
+        flex: 1;
+        text-align: center;
+        padding: 0.5rem;
+        font-size: 0.875rem;
+    }
+
+    .student-card {
+        padding: 1rem;
+    }
+
+    .student-actions {
+        flex-direction: column;
+    }
+
+    .modal-body {
+        padding: 1rem;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .header,
+    .modal,
+    .toast-container {
+        display: none !important;
+    }
+
+    .main-content {
+        max-width: none;
+        padding: 0;
+    }
+
+    .page {
+        display: block !important;
+    }
+
+    body {
+        background: white !important;
+        color: black !important;
+    }
+}
+    </style>
+</head>
+<body class="light-theme">
+    <!-- Main Application -->
+    <div id="app" class="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-container">
+                    <svg class="logo" width="50" height="50" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="48" fill="#2563eb" stroke="#1d4ed8" stroke-width="2"/>
+                        <path d="M25 35 L50 30 L75 35 L75 65 L50 60 L25 65 Z" fill="#ffffff" opacity="0.9"/>
+                        <path d="M50 30 L50 60" stroke="#2563eb" stroke-width="1.5"/>
+                        <path d="M30 40 L45 38" stroke="#2563eb" stroke-width="1" opacity="0.6"/>
+                        <path d="M30 45 L45 43" stroke="#2563eb" stroke-width="1" opacity="0.6"/>
+                        <path d="M30 50 L45 48" stroke="#2563eb" stroke-width="1" opacity="0.6"/>
+                        <path d="M55 38 L70 40" stroke="#2563eb" stroke-width="1" opacity="0.6"/>
+                        <path d="M55 43 L70 45" stroke="#2563eb" stroke-width="1" opacity="0.6"/>
+                        <path d="M55 48 L70 50" stroke="#2563eb" stroke-width="1" opacity="0.6"/>
+                        <text x="50" y="22" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="8" font-weight="bold">I.L.C</text>
+                        <g transform="translate(15, 70)">
+                            <rect width="12" height="8" fill="#ce1126" rx="1"/>
+                            <rect x="4" y="0" width="4" height="8" fill="#fcd116"/>
+                            <rect x="8" y="0" width="4" height="8" fill="#009460"/>
+                        </g>
+                        <g transform="translate(73, 70)">
+                            <rect width="12" height="8" fill="#000000" rx="1"/>
+                            <rect x="0" y="2.67" width="12" height="2.66" fill="#dd0000"/>
+                            <rect x="0" y="5.33" width="12" height="2.67" fill="#ffce00"/>
+                        </g>
+                        <g transform="translate(35, 72)">
+                            <polygon points="5,3 10,1 15,3 15,4 10,2 5,4" fill="#ffffff" opacity="0.8"/>
+                            <rect x="9.5" y="2" width="1" height="3" fill="#ffffff" opacity="0.8"/>
+                            <circle cx="9.5" cy="5.5" r="0.5" fill="#ffffff" opacity="0.8"/>
+                        </g>
+                        <g transform="translate(55, 72)">
+                            <circle cx="5" cy="3" r="3" fill="none" stroke="#ffffff" stroke-width="0.8" opacity="0.8"/>
+                            <path d="M2 3 Q5 1 8 3" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.8"/>
+                            <path d="M2 3 Q5 5 8 3" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.8"/>
+                            <line x1="5" y1="0" x2="5" y2="6" stroke="#ffffff" stroke-width="0.5" opacity="0.8"/>
+                        </g>
+                        <text x="50" y="88" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="5" font-weight="300" opacity="0.9">INSTITUT</text>
+                        <circle cx="50" cy="50" r="47" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.3"/>
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.2"/>
+                    </svg>
+                    <div class="logo-text">
+                        <h1>I.L.C Institut</h1>
+                        <p data-translate="subtitle">Institut de langues et de communication</p>
+                    </div>
+                </div>
+                
+                <nav class="nav">
+                    <button class="nav-btn" data-page="dashboard" data-translate="dashboard">Tableau de bord</button>
+                    <button class="nav-btn" data-page="students" data-translate="students">Étudiants</button>
+                    <button class="nav-btn" data-page="payments" data-translate="payments">Paiements</button>
+                    <button class="nav-btn" data-page="settings" data-translate="settings">Paramètres</button>
+                </nav>
+                
+                <div class="header-actions">
+                    <button id="theme-toggle" class="icon-btn" title="Changer le thème">
+                        <svg class="icon"><use href="#sun"></use></svg>
+                    </button>
+                    <button id="offline-indicator" class="icon-btn" title="Statut de connexion">
+                        <svg class="icon"><use href="#wifi"></use></svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Page -->
+            <div id="dashboard-page" class="page active">
+                <div class="page-header">
+                    <h2 data-translate="dashboard">Tableau de bord</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <svg class="icon"><use href="#users"></use></svg>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="total-students">0</h3>
+                                <p data-translate="total_students">Étudiants inscrits</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <svg class="icon"><use href="#credit-card"></use></svg>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="total-revenue">0 GNF</h3>
+                                <p data-translate="total_revenue">Revenus totaux</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <svg class="icon"><use href="#calendar"></use></svg>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="monthly-revenue">0 GNF</h3>
+                                <p data-translate="monthly_revenue">Revenus ce mois</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="quick-actions">
+                        <h3 data-translate="quick_actions">Actions rapides</h3>
+                        <div class="action-buttons">
+                            <button class="action-btn" data-action="add-student">
+                                <svg class="icon"><use href="#user-plus"></use></svg>
+                                <span data-translate="add_student">Ajouter un étudiant</span>
+                            </button>
+                            <button class="action-btn" data-action="add-payment">
+                                <svg class="icon"><use href="#plus"></use></svg>
+                                <span data-translate="add_payment">Enregistrer un paiement</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="recent-activities">
+                        <h3 data-translate="recent_activities">Activités récentes</h3>
+                        <div id="recent-activities-list" class="activities-list">
+                            <!-- Activities will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Students Page -->
+            <div id="students-page" class="page">
+                <div class="page-header">
+                    <h2 data-translate="students">Étudiants</h2>
+                    <div class="page-actions">
+                        <div class="search-container">
+                            <svg class="icon search-icon"><use href="#search"></use></svg>
+                            <input type="text" id="student-search" placeholder="Rechercher un étudiant..." data-translate-placeholder="search_student">
+                        </div>
+                        <button id="add-student-btn" class="btn btn-primary">
+                            <svg class="icon"><use href="#user-plus"></use></svg>
+                            <span data-translate="add_student">Ajouter un étudiant</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="class-tabs">
+                    <button class="tab-btn active" data-class="all" data-translate="all_classes">Toutes les classes</button>
+                    <button class="tab-btn" data-class="A1">A1</button>
+                    <button class="tab-btn" data-class="A2">A2</button>
+                    <button class="tab-btn" data-class="B1">B1</button>
+                    <button class="tab-btn" data-class="B2">B2</button>
+                </div>
+
+                <div id="students-grid" class="students-grid">
+                    <!-- Students will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Payments Page -->
+            <div id="payments-page" class="page">
+                <div class="page-header">
+                    <h2 data-translate="payments">Paiements</h2>
+                    <button id="add-payment-btn" class="btn btn-primary">
+                        <svg class="icon"><use href="#plus"></use></svg>
+                        <span data-translate="add_payment">Enregistrer un paiement</span>
+                    </button>
+                </div>
+
+                <div class="payments-filters">
+                    <select id="payment-month-filter">
+                        <option value="" data-translate="all_months">Tous les mois</option>
+                        <option value="Janvier">Janvier</option>
+                        <option value="Février">Février</option>
+                        <option value="Mars">Mars</option>
+                        <option value="Avril">Avril</option>
+                        <option value="Mai">Mai</option>
+                        <option value="Juin">Juin</option>
+                        <option value="Juillet">Juillet</option>
+                        <option value="Août">Août</option>
+                        <option value="Septembre">Septembre</option>
+                        <option value="Octobre">Octobre</option>
+                        <option value="Novembre">Novembre</option>
+                        <option value="Décembre">Décembre</option>
+                    </select>
+                    <select id="payment-student-filter">
+                        <option value="" data-translate="all_students">Tous les étudiants</option>
+                    </select>
+                </div>
+
+                <div id="payments-table" class="payments-table">
+                    <!-- Payments will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Settings Page -->
+            <div id="settings-page" class="page">
+                <div class="page-header">
+                    <h2 data-translate="settings">Paramètres</h2>
+                </div>
+
+                <div class="settings-grid">
+                    <div class="setting-section">
+                        <h3 data-translate="language">Langue</h3>
+                        <select id="language-select">
+                            <option value="fr">Français</option>
+                            <option value="en">English</option>
+                            <option value="de">Deutsch</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-section">
+                        <h3 data-translate="theme">Thème</h3>
+                        <div class="theme-options">
+                            <label class="radio-option">
+                                <input type="radio" name="theme" value="light" checked>
+                                <span data-translate="light_theme">Thème clair</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="theme" value="dark">
+                                <span data-translate="dark_theme">Thème sombre</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="setting-section">
+                        <h3 data-translate="notifications">Notifications</h3>
+                        <label class="switch">
+                            <input type="checkbox" id="notifications-toggle" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-section">
+                        <h3 data-translate="about">À propos</h3>
+                        <div class="about-content">
+                            <p data-translate="app_description">Application créée par Sharawi On The Line</p>
+                            <p data-translate="version">Version : v1.0</p>
+                            <p data-translate="offline_status">Statut hors ligne : <span id="offline-status">Actif</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <!-- Student Modal -->
+    <div id="student-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="student-modal-title" data-translate="add_student">Ajouter un étudiant</h3>
+                <button class="close-btn" data-close="student-modal">
+                    <svg class="icon"><use href="#x"></use></svg>
+                </button>
+            </div>
+            <form id="student-form" class="modal-body">
+                <div class="form-group">
+                    <label for="student-firstname" data-translate="firstname">Prénom</label>
+                    <input type="text" id="student-firstname" required>
+                </div>
+                <div class="form-group">
+                    <label for="student-lastname" data-translate="lastname">Nom</label>
+                    <input type="text" id="student-lastname" required>
+                </div>
+                <div class="form-group">
+                    <label for="student-birthdate" data-translate="birthdate">Date de naissance</label>
+                    <input type="date" id="student-birthdate" required>
+                </div>
+                <div class="form-group">
+                    <label for="student-class" data-translate="class">Classe</label>
+                    <select id="student-class" required>
+                        <option value="">Sélectionner une classe</option>
+                        <option value="A1">A1</option>
+                        <option value="A2">A2</option>
+                        <option value="B1">B1</option>
+                        <option value="B2">B2</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="student-photo" data-translate="photo">Photo</label>
+                    <input type="file" id="student-photo" accept="image/*">
+                    <div id="photo-preview" class="photo-preview"></div>
+                </div>
+                <div class="form-group">
+                    <label for="inscription-fee" data-translate="inscription_fee">Frais d'inscription (GNF)</label>
+                    <input type="number" id="inscription-fee" min="0" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-close="student-modal" data-translate="cancel">Annuler</button>
+                    <button type="submit" class="btn btn-primary" data-translate="save">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="payment-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 data-translate="add_payment">Enregistrer un paiement</h3>
+                <button class="close-btn" data-close="payment-modal">
+                    <svg class="icon"><use href="#x"></use></svg>
+                </button>
+            </div>
+            <form id="payment-form" class="modal-body">
+                <div class="form-group">
+                    <label for="payment-student" data-translate="student">Étudiant</label>
+                    <select id="payment-student" required>
+                        <option value="">Sélectionner un étudiant</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="payment-amount" data-translate="amount">Montant (GNF)</label>
+                    <input type="number" id="payment-amount" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="payment-month" data-translate="month">Mois</label>
+                    <select id="payment-month" required>
+                        <option value="">Sélectionner un mois</option>
+                        <option value="Janvier">Janvier</option>
+                        <option value="Février">Février</option>
+                        <option value="Mars">Mars</option>
+                        <option value="Avril">Avril</option>
+                        <option value="Mai">Mai</option>
+                        <option value="Juin">Juin</option>
+                        <option value="Juillet">Juillet</option>
+                        <option value="Août">Août</option>
+                        <option value="Septembre">Septembre</option>
+                        <option value="Octobre">Octobre</option>
+                        <option value="Novembre">Novembre</option>
+                        <option value="Décembre">Décembre</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="payment-reason" data-translate="reason">Motif du paiement</label>
+                    <input type="text" id="payment-reason" required>
+                </div>
+                <div class="form-group">
+                    <label for="payment-date" data-translate="payment_date">Date du paiement</label>
+                    <input type="date" id="payment-date" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-close="payment-modal" data-translate="cancel">Annuler</button>
+                    <button type="submit" class="btn btn-primary" data-translate="save">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- SVG Icons -->
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <defs>
+            <!-- User Icons -->
+            <symbol id="user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+            </symbol>
+            
+            <symbol id="user-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="8.5" cy="7" r="4"/>
+                <line x1="20" y1="8" x2="20" y2="14"/>
+                <line x1="23" y1="11" x2="17" y2="11"/>
+            </symbol>
+            
+            <symbol id="users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </symbol>
+            
+            <!-- Payment Icons -->
+            <symbol id="credit-card" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                <line x1="1" y1="10" x2="23" y2="10"/>
+            </symbol>
+            
+            <!-- Navigation Icons -->
+            <symbol id="calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+            </symbol>
+            
+            <!-- Action Icons -->
+            <symbol id="plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+            </symbol>
+            
+            <symbol id="edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </symbol>
+            
+            <symbol id="trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3,6 5,6 21,6"/>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                <line x1="10" y1="11" x2="10" y2="17"/>
+                <line x1="14" y1="11" x2="14" y2="17"/>
+            </symbol>
+            
+            <symbol id="search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.35-4.35"/>
+            </symbol>
+            
+            <symbol id="x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+            </symbol>
+            
+            <!-- Theme Icons -->
+            <symbol id="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="5"/>
+                <line x1="12" y1="1" x2="12" y2="3"/>
+                <line x1="12" y1="21" x2="12" y2="23"/>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                <line x1="1" y1="12" x2="3" y2="12"/>
+                <line x1="21" y1="12" x2="23" y2="12"/>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </symbol>
+            
+            <symbol id="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </symbol>
+            
+            <!-- Connectivity Icons -->
+            <symbol id="wifi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12.55a11 11 0 0 1 14 0"/>
+                <path d="M1.42 9a16 16 0 0 1 21.16 0"/>
+                <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+                <line x1="12" y1="20" x2="12.01" y2="20"/>
+            </symbol>
+            
+            <symbol id="wifi-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="1" y1="1" x2="23" y2="23"/>
+                <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/>
+                <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/>
+                <path d="M10.71 5.05A16 16 0 0 1 22.58 9"/>
+                <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/>
+                <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+                <line x1="12" y1="20" x2="12.01" y2="20"/>
+            </symbol>
+            
+            <!-- Status Icons -->
+            <symbol id="check-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22,4 12,14.01 9,11.01"/>
+            </symbol>
+            
+            <symbol id="x-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="15" y1="9" x2="9" y2="15"/>
+                <line x1="9" y1="9" x2="15" y2="15"/>
+            </symbol>
+            
+            <symbol id="alert-triangle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                <line x1="12" y1="9" x2="12" y2="13"/>
+                <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </symbol>
+            
+            <symbol id="info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="16" x2="12" y2="12"/>
+                <line x1="12" y1="8" x2="12.01" y2="8"/>
+            </symbol>
+            
+            <!-- Activity Icons -->
+            <symbol id="activity" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/>
+            </symbol>
+        </defs>
+    </svg>
+
+    <!-- Scripts -->
+    <script>
+// Multi-language Translation System
+class Translations {
+    static translations = {
+        fr: {
+            // Navigation and general
+            dashboard: "Tableau de bord",
+            students: "Étudiants",
+            payments: "Paiements",
+            settings: "Paramètres",
+            subtitle: "Institut de langues et de communication",
+            
+            // Dashboard
+            total_students: "Étudiants inscrits",
+            total_revenue: "Revenus totaux",
+            monthly_revenue: "Revenus ce mois",
+            quick_actions: "Actions rapides",
+            recent_activities: "Activités récentes",
+            add_student: "Ajouter un étudiant",
+            add_payment: "Enregistrer un paiement",
+            
+            // Students
+            search_student: "Rechercher un étudiant...",
+            all_classes: "Toutes les classes",
+            firstname: "Prénom",
+            lastname: "Nom",
+            birthdate: "Date de naissance",
+            class: "Classe",
+            photo: "Photo",
+            inscription_fee: "Frais d'inscription (GNF)",
+            
+            // Payments
+            all_months: "Tous les mois",
+            all_students: "Tous les étudiants",
+            student: "Étudiant",
+            amount: "Montant (GNF)",
+            month: "Mois",
+            reason: "Motif du paiement",
+            payment_date: "Date du paiement",
+            
+            // Settings
+            language: "Langue",
+            theme: "Thème",
+            light_theme: "Thème clair",
+            dark_theme: "Thème sombre",
+            notifications: "Notifications",
+            about: "À propos",
+            app_description: "Application créée par Sharawi On The Line",
+            version: "Version : v1.0",
+            offline_status: "Statut hors ligne :",
+            
+            // Actions
+            save: "Enregistrer",
+            cancel: "Annuler",
+            edit: "Modifier",
+            delete: "Supprimer",
+            search: "Rechercher",
+        },
+        
+        en: {
+            // Navigation and general
+            dashboard: "Dashboard",
+            students: "Students",
+            payments: "Payments",
+            settings: "Settings",
+            subtitle: "Language and Communication Institute",
+            
+            // Dashboard
+            total_students: "Enrolled Students",
+            total_revenue: "Total Revenue",
+            monthly_revenue: "This Month's Revenue",
+            quick_actions: "Quick Actions",
+            recent_activities: "Recent Activities",
+            add_student: "Add Student",
+            add_payment: "Record Payment",
+            
+            // Students
+            search_student: "Search student...",
+            all_classes: "All Classes",
+            firstname: "First Name",
+            lastname: "Last Name",
+            birthdate: "Date of Birth",
+            class: "Class",
+            photo: "Photo",
+            inscription_fee: "Registration Fee (GNF)",
+            
+            // Payments
+            all_months: "All Months",
+            all_students: "All Students",
+            student: "Student",
+            amount: "Amount (GNF)",
+            month: "Month",
+            reason: "Payment Reason",
+            payment_date: "Payment Date",
+            
+            // Settings
+            language: "Language",
+            theme: "Theme",
+            light_theme: "Light Theme",
+            dark_theme: "Dark Theme",
+            notifications: "Notifications",
+            about: "About",
+            app_description: "Application created by Sharawi On The Line",
+            version: "Version: v1.0",
+            offline_status: "Offline Status:",
+            
+            // Actions
+            save: "Save",
+            cancel: "Cancel",
+            edit: "Edit",
+            delete: "Delete",
+            search: "Search",
+        },
+        
+        de: {
+            // Navigation and general
+            dashboard: "Dashboard",
+            students: "Studenten",
+            payments: "Zahlungen",
+            settings: "Einstellungen",
+            subtitle: "Institut für Sprachen und Kommunikation",
+            
+            // Dashboard
+            total_students: "Eingeschriebene Studenten",
+            total_revenue: "Gesamteinnahmen",
+            monthly_revenue: "Einnahmen diesen Monat",
+            quick_actions: "Schnellaktionen",
+            recent_activities: "Kürzliche Aktivitäten",
+            add_student: "Student hinzufügen",
+            add_payment: "Zahlung erfassen",
+            
+            // Students
+            search_student: "Student suchen...",
+            all_classes: "Alle Klassen",
+            firstname: "Vorname",
+            lastname: "Nachname",
+            birthdate: "Geburtsdatum",
+            class: "Klasse",
+            photo: "Foto",
+            inscription_fee: "Anmeldegebühr (GNF)",
+            
+            // Payments
+            all_months: "Alle Monate",
+            all_students: "Alle Studenten",
+            student: "Student",
+            amount: "Betrag (GNF)",
+            month: "Monat",
+            reason: "Zahlungsgrund",
+            payment_date: "Zahlungsdatum",
+            
+            // Settings
+            language: "Sprache",
+            theme: "Design",
+            light_theme: "Helles Design",
+            dark_theme: "Dunkles Design",
+            notifications: "Benachrichtigungen",
+            about: "Über",
+            app_description: "Anwendung erstellt von Sharawi On The Line",
+            version: "Version: v1.0",
+            offline_status: "Offline-Status:",
+            
+            // Actions
+            save: "Speichern",
+            cancel: "Abbrechen",
+            edit: "Bearbeiten",
+            delete: "Löschen",
+            search: "Suchen",
+        }
+    };
+
+    static currentLanguage = 'fr';
+
+    static async apply(language = 'fr') {
+        this.currentLanguage = language;
+        const translations = this.translations[language] || this.translations.fr;
+        
+        // Update all elements with data-translate attribute
+        document.querySelectorAll('[data-translate]').forEach(element => {
+            const key = element.getAttribute('data-translate');
+            if (translations[key]) {
+                element.textContent = translations[key];
+            }
+        });
+        
+        // Update elements with data-translate-placeholder attribute
+        document.querySelectorAll('[data-translate-placeholder]').forEach(element => {
+            const key = element.getAttribute('data-translate-placeholder');
+            if (translations[key]) {
+                element.placeholder = translations[key];
+            }
+        });
+
+        // Update document language attribute
+        document.documentElement.lang = language;
+        
+        console.log(`Language changed to: ${language}`);
+    }
+
+    static get(key, language = null) {
+        const lang = language || this.currentLanguage;
+        const translations = this.translations[lang] || this.translations.fr;
+        return translations[key] || key;
+    }
+}
+
+// IndexedDB Database Management
+class Database {
+    static dbName = 'ILCInstitut';
+    static version = 1;
+    static db = null;
+
+    static async init() {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(this.dbName, this.version);
+
+            request.onerror = () => {
+                console.error('Database failed to open');
+                reject(request.error);
+            };
+
+            request.onsuccess = () => {
+                this.db = request.result;
+                console.log('Database opened successfully');
+                resolve(this.db);
+            };
+
+            request.onupgradeneeded = (e) => {
+                const db = e.target.result;
+                console.log('Database upgrade needed');
+
+                // Create students object store
+                if (!db.objectStoreNames.contains('students')) {
+                    const studentsStore = db.createObjectStore('students', { keyPath: 'id' });
+                    studentsStore.createIndex('firstName', 'firstName', { unique: false });
+                    studentsStore.createIndex('lastName', 'lastName', { unique: false });
+                    studentsStore.createIndex('classe', 'classe', { unique: false });
+                    studentsStore.createIndex('createdAt', 'createdAt', { unique: false });
+                }
+
+                // Create payments object store
+                if (!db.objectStoreNames.contains('payments')) {
+                    const paymentsStore = db.createObjectStore('payments', { keyPath: 'id' });
+                    paymentsStore.createIndex('studentId', 'studentId', { unique: false });
+                    paymentsStore.createIndex('date', 'date', { unique: false });
+                    paymentsStore.createIndex('month', 'month', { unique: false });
+                    paymentsStore.createIndex('createdAt', 'createdAt', { unique: false });
+                }
+
+                // Create settings object store
+                if (!db.objectStoreNames.contains('settings')) {
+                    const settingsStore = db.createObjectStore('settings', { keyPath: 'key' });
+                    
+                    // Add default settings
+                    const defaultSettings = [
+                        { key: 'language', value: 'fr' },
+                        { key: 'theme', value: 'light' },
+                        { key: 'notifications', value: true }
+                    ];
+
+                    settingsStore.transaction.oncomplete = () => {
+                        const transaction = db.transaction(['settings'], 'readwrite');
+                        const store = transaction.objectStore('settings');
+                        defaultSettings.forEach(setting => {
+                            store.add(setting);
+                        });
+                    };
+                }
+            };
+        });
+    }
+
+    // Student operations
+    static async addStudent(student) {
+        return this.performTransaction('students', 'readwrite', (store) => {
+            return store.add(student);
+        });
+    }
+
+    static async getStudent(id) {
+        return this.performTransaction('students', 'readonly', (store) => {
+            return store.get(id);
+        });
+    }
+
+    static async getAllStudents() {
+        return this.performTransaction('students', 'readonly', (store) => {
+            return store.getAll();
+        });
+    }
+
+    static async updateStudent(student) {
+        return this.performTransaction('students', 'readwrite', (store) => {
+            return store.put(student);
+        });
+    }
+
+    static async deleteStudent(id) {
+        // Also delete associated payments
+        const payments = await this.getPaymentsByStudent(id);
+        for (const payment of payments) {
+            await this.deletePayment(payment.id);
+        }
+        
+        return this.performTransaction('students', 'readwrite', (store) => {
+            return store.delete(id);
+        });
+    }
+
+    static async getStudentsByClass(classe) {
+        return this.performTransaction('students', 'readonly', (store) => {
+            const index = store.index('classe');
+            return index.getAll(classe);
+        });
+    }
+
+    // Payment operations
+    static async addPayment(payment) {
+        return this.performTransaction('payments', 'readwrite', (store) => {
+            return store.add(payment);
+        });
+    }
+
+    static async getPayment(id) {
+        return this.performTransaction('payments', 'readonly', (store) => {
+            return store.get(id);
+        });
+    }
+
+    static async getAllPayments() {
+        return this.performTransaction('payments', 'readonly', (store) => {
+            return store.getAll();
+        });
+    }
+
+    static async updatePayment(payment) {
+        return this.performTransaction('payments', 'readwrite', (store) => {
+            return store.put(payment);
+        });
+    }
+
+    static async deletePayment(id) {
+        return this.performTransaction('payments', 'readwrite', (store) => {
+            return store.delete(id);
+        });
+    }
+
+    static async getPaymentsByStudent(studentId) {
+        return this.performTransaction('payments', 'readonly', (store) => {
+            const index = store.index('studentId');
+            return index.getAll(studentId);
+        });
+    }
+
+    // Settings operations
+    static async getSetting(key) {
+        const result = await this.performTransaction('settings', 'readonly', (store) => {
+            return store.get(key);
+        });
+        return result ? result.value : null;
+    }
+
+    static async getSettings() {
+        const results = await this.performTransaction('settings', 'readonly', (store) => {
+            return store.getAll();
+        });
+        
+        const settings = {};
+        results.forEach(item => {
+            settings[item.key] = item.value;
+        });
+        
+        return settings;
+    }
+
+    static async setSetting(key, value) {
+        return this.performTransaction('settings', 'readwrite', (store) => {
+            return store.put({ key, value });
+        });
+    }
+
+    static async updateSettings(settings) {
+        const transaction = this.db.transaction(['settings'], 'readwrite');
+        const store = transaction.objectStore('settings');
+        
+        const promises = Object.entries(settings).map(([key, value]) => {
+            return new Promise((resolve, reject) => {
+                const request = store.put({ key, value });
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        });
+        
+        return Promise.all(promises);
+    }
+
+    // Statistics and analytics
+    static async getStudentCount() {
+        const students = await this.getAllStudents();
+        return students.length;
+    }
+
+    static async getTotalRevenue() {
+        const payments = await this.getAllPayments();
+        const students = await this.getAllStudents();
+        
+        let total = 0;
+        
+        // Add inscription fees
+        students.forEach(student => {
+            total += student.inscriptionFee || 0;
+        });
+        
+        // Add payments
+        payments.forEach(payment => {
+            total += payment.amount || 0;
+        });
+        
+        return total;
+    }
+
+    static async getMonthlyRevenue(year = new Date().getFullYear(), month = new Date().getMonth() + 1) {
+        const payments = await this.getAllPayments();
+        const startDate = new Date(year, month - 1, 1);
+        const endDate = new Date(year, month, 0);
+        
+        return payments
+            .filter(payment => {
+                const paymentDate = new Date(payment.date);
+                return paymentDate >= startDate && paymentDate <= endDate;
+            })
+            .reduce((total, payment) => total + (payment.amount || 0), 0);
+    }
+
+    static async getRecentActivities(limit = 10) {
+        const students = await this.getAllStudents();
+        const payments = await this.getAllPayments();
+        
+        const activities = [];
+        
+        // Add student registrations
+        students.forEach(student => {
+            activities.push({
+                type: 'registration',
+                studentId: student.id,
+                studentName: `${student.firstName} ${student.lastName}`,
+                date: student.createdAt,
+                data: student
+            });
+        });
+        
+        // Add payments
+        payments.forEach(payment => {
+            const student = students.find(s => s.id === payment.studentId);
+            activities.push({
+                type: 'payment',
+                studentId: payment.studentId,
+                studentName: student ? `${student.firstName} ${student.lastName}` : 'Étudiant inconnu',
+                date: payment.createdAt,
+                data: payment
+            });
+        });
+        
+        return activities
+            .sort((a, b) => new Date(b.date) - new Date(a.date))
+            .slice(0, limit);
+    }
+
+    // Utility methods
+    static async performTransaction(storeName, mode, operation) {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction([storeName], mode);
+            const store = transaction.objectStore(storeName);
+            
+            const request = operation(store);
+            
+            request.onsuccess = () => {
+                resolve(request.result);
+            };
+            
+            request.onerror = () => {
+                reject(request.error);
+            };
+        });
+    }
+
+    static generateStudentId(firstName, classe) {
+        const timestamp = Date.now().toString();
+        const lastFourDigits = timestamp.slice(-4);
+        const cleanFirstName = firstName.replace(/\s+/g, '').substring(0, 3).toUpperCase();
+        return `ILC-${classe}-${cleanFirstName}-${lastFourDigits}`;
+    }
+
+    static generatePaymentId() {
+        return `PAY-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    }
+}
+
+// Dashboard Component
+class Dashboard {
+    constructor() {
+        this.stats = {
+            totalStudents: 0,
+            totalRevenue: 0,
+            monthlyRevenue: 0
+        };
+        this.recentActivities = [];
+    }
+
+    async init() {
+        await this.updateStats();
+        await this.loadRecentActivities();
+        this.setupEventListeners();
+    }
+
+    setupEventListeners() {
+        // Quick action buttons
+        document.querySelectorAll('[data-action]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const action = e.currentTarget.dataset.action;
+                this.handleQuickAction(action);
+            });
+        });
+    }
+
+    async updateStats() {
+        try {
+            // Get total students
+            this.stats.totalStudents = await Database.getStudentCount();
+            
+            // Get total revenue (including inscription fees)
+            this.stats.totalRevenue = await Database.getTotalRevenue();
+            
+            // Get current month revenue
+            const now = new Date();
+            this.stats.monthlyRevenue = await Database.getMonthlyRevenue(
+                now.getFullYear(),
+                now.getMonth() + 1
+            );
+
+            this.displayStats();
+        } catch (error) {
+            console.error('Failed to update stats:', error);
+            app.showToast('Erreur lors de la mise à jour des statistiques', 'error');
+        }
+    }
+
+    displayStats() {
+        // Update total students
+        const totalStudentsEl = document.getElementById('total-students');
+        if (totalStudentsEl) {
+            totalStudentsEl.textContent = this.stats.totalStudents.toLocaleString('fr-FR');
+        }
+
+        // Update total revenue
+        const totalRevenueEl = document.getElementById('total-revenue');
+        if (totalRevenueEl) {
+            totalRevenueEl.textContent = this.formatCurrency(this.stats.totalRevenue);
+        }
+
+        // Update monthly revenue
+        const monthlyRevenueEl = document.getElementById('monthly-revenue');
+        if (monthlyRevenueEl) {
+            monthlyRevenueEl.textContent = this.formatCurrency(this.stats.monthlyRevenue);
+        }
+    }
+
+    async loadRecentActivities() {
+        try {
+            this.recentActivities = await Database.getRecentActivities(10);
+            this.displayRecentActivities();
+        } catch (error) {
+            console.error('Failed to load recent activities:', error);
+            app.showToast('Erreur lors du chargement des activités récentes', 'error');
+        }
+    }
+
+    displayRecentActivities() {
+        const container = document.getElementById('recent-activities-list');
+        if (!container) return;
+
+        if (this.recentActivities.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <svg class="icon">
+                        <use href="#activity"></use>
+                    </svg>
+                    <p>Aucune activité récente</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = this.recentActivities
+            .map(activity => this.createActivityItem(activity))
+            .join('');
+    }
+
+    createActivityItem(activity) {
+        const date = new Date(activity.date);
+        const timeAgo = this.formatTimeAgo(date);
+        
+        let icon, description;
+        
+        switch (activity.type) {
+            case 'registration':
+                icon = 'user-plus';
+                description = `Nouvel étudiant inscrit : ${activity.studentName}`;
+                break;
+            case 'payment':
+                icon = 'credit-card';
+                const amount = this.formatCurrency(activity.data.amount);
+                description = `Paiement reçu de ${activity.studentName} : ${amount}`;
+                break;
+            default:
+                icon = 'activity';
+                description = 'Activité inconnue';
+        }
+
+        return `
+            <div class="activity-item">
+                <div class="activity-icon">
+                    <svg class="icon">
+                        <use href="#${icon}"></use>
+                    </svg>
+                </div>
+                <div class="activity-content">
+                    <p>${description}</p>
+                    <span>${timeAgo}</span>
+                </div>
+            </div>
+        `;
+    }
+
+    handleQuickAction(action) {
+        switch (action) {
+            case 'add-student':
+                app.showModal('student-modal');
+                break;
+            case 'add-payment':
+                if (app.components.payments) {
+                    app.components.payments.populateStudentDropdown();
+                }
+                app.showModal('payment-modal');
+                break;
+        }
+    }
+
+    formatCurrency(amount) {
+        return new Intl.NumberFormat('fr-FR', {
+            style: 'currency',
+            currency: 'GNF',
+            minimumFractionDigits: 0
+        }).format(amount || 0);
+    }
+
+    formatTimeAgo(date) {
+        const now = new Date();
+        const diffInSeconds = Math.floor((now - date) / 1000);
+        
+        if (diffInSeconds < 60) {
+            return 'Il y a quelques secondes';
+        } else if (diffInSeconds < 3600) {
+            const minutes = Math.floor(diffInSeconds / 60);
+            return `Il y a ${minutes} minute${minutes > 1 ? 's' : ''}`;
+        } else if (diffInSeconds < 86400) {
+            const hours = Math.floor(diffInSeconds / 3600);
+            return `Il y a ${hours} heure${hours > 1 ? 's' : ''}`;
+        } else if (diffInSeconds < 2592000) {
+            const days = Math.floor(diffInSeconds / 86400);
+            return `Il y a ${days} jour${days > 1 ? 's' : ''}`;
+        } else {
+            return date.toLocaleDateString('fr-FR');
+        }
+    }
+
+    // Public method to refresh dashboard
+    async refresh() {
+        await this.updateStats();
+        await this.loadRecentActivities();
+    }
+}
+
+// Students Component
+class Students {
+    constructor() {
+        this.currentFilter = 'all';
+        this.searchQuery = '';
+        this.editingStudent = null;
+    }
+
+    async init() {
+        await this.loadStudents();
+        this.setupEventListeners();
+    }
+
+    setupEventListeners() {
+        // Search functionality
+        const searchInput = document.getElementById('student-search');
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                this.searchQuery = e.target.value;
+                this.filterAndDisplayStudents();
+            });
+        }
+
+        // Class filter tabs
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                this.currentFilter = e.target.dataset.class;
+                this.filterAndDisplayStudents();
+            });
+        });
+
+        // Add student button
+        document.getElementById('add-student-btn')?.addEventListener('click', () => {
+            this.showAddStudentModal();
+        });
+
+        // Photo upload preview
+        document.getElementById('student-photo')?.addEventListener('change', (e) => {
+            this.handlePhotoUpload(e);
+        });
+    }
+
+    async loadStudents() {
+        try {
+            this.students = await Database.getAllStudents();
+            this.filterAndDisplayStudents();
+        } catch (error) {
+            console.error('Failed to load students:', error);
+            app.showToast('Erreur lors du chargement des étudiants', 'error');
+        }
+    }
+
+    filterAndDisplayStudents() {
+        let filteredStudents = this.students;
+
+        // Apply class filter
+        if (this.currentFilter && this.currentFilter !== 'all') {
+            filteredStudents = filteredStudents.filter(student => 
+                student.classe === this.currentFilter
+            );
+        }
+
+        // Apply search filter
+        if (this.searchQuery) {
+            const query = this.searchQuery.toLowerCase();
+            filteredStudents = filteredStudents.filter(student =>
+                student.firstName.toLowerCase().includes(query) ||
+                student.lastName.toLowerCase().includes(query) ||
+                student.id.toLowerCase().includes(query)
+            );
+        }
+
+        this.displayStudents(filteredStudents);
+    }
+
+    displayStudents(students) {
+        const container = document.getElementById('students-grid');
+        if (!container) return;
+
+        if (students.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <svg class="icon empty-icon">
+                        <use href="#users"></use>
+                    </svg>
+                    <h3>Aucun étudiant trouvé</h3>
+                    <p>Commencez par ajouter votre premier étudiant.</p>
+                    <button class="btn btn-primary" onclick="app.components.students.showAddStudentModal()">
+                        <svg class="icon">
+                            <use href="#user-plus"></use>
+                        </svg>
+                        Ajouter un étudiant
+                    </button>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = students.map(student => this.createStudentCard(student)).join('');
+    }
+
+    createStudentCard(student) {
+        const birthDate = new Date(student.birthDate).toLocaleDateString('fr-FR');
+        const registrationDate = new Date(student.createdAt).toLocaleDateString('fr-FR');
+
+        return `
+            <div class="student-card" data-student-id="${student.id}">
+                <div class="student-header">
+                    ${student.photo ? 
+                        `<img src="${student.photo}" alt="${student.firstName}" class="student-photo">` :
+                        `<div class="student-photo" style="display: flex; align-items: center; justify-content: center; background: var(--bg-primary);">
+                            <svg class="icon">
+                                <use href="#user"></use>
+                            </svg>
+                        </div>`
+                    }
+                    <div class="student-info">
+                        <h3>${student.firstName} ${student.lastName}</h3>
+                        <div class="student-id">${student.id}</div>
+                    </div>
+                </div>
+                
+                <div class="student-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Classe:</span>
+                        <span class="detail-value">
+                            <span class="class-badge">${student.classe}</span>
+                        </span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Date de naissance:</span>
+                        <span class="detail-value">${birthDate}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Inscription:</span>
+                        <span class="detail-value">${registrationDate}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Frais d'inscription:</span>
+                        <span class="detail-value">${this.formatCurrency(student.inscriptionFee)}</span>
+                    </div>
+                </div>
+                
+                <div class="student-actions">
+                    <button class="btn btn-secondary btn-small" onclick="app.components.students.editStudent('${student.id}')">
+                        <svg class="icon">
+                            <use href="#edit"></use>
+                        </svg>
+                        Modifier
+                    </button>
+                    <button class="btn btn-danger btn-small" onclick="app.components.students.deleteStudent('${student.id}')">
+                        <svg class="icon">
+                            <use href="#trash"></use>
+                        </svg>
+                        Supprimer
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
+    showAddStudentModal() {
+        this.editingStudent = null;
+        document.getElementById('student-modal-title').textContent = 'Ajouter un étudiant';
+        document.getElementById('student-form').reset();
+        document.getElementById('photo-preview').innerHTML = '';
+        app.showModal('student-modal');
+    }
+
+    async editStudent(studentId) {
+        try {
+            const student = await Database.getStudent(studentId);
+            if (!student) {
+                app.showToast('Étudiant non trouvé', 'error');
+                return;
+            }
+
+            this.editingStudent = student;
+            document.getElementById('student-modal-title').textContent = 'Modifier l\'étudiant';
+            
+            // Fill form with student data
+            document.getElementById('student-firstname').value = student.firstName;
+            document.getElementById('student-lastname').value = student.lastName;
+            document.getElementById('student-birthdate').value = student.birthDate;
+            document.getElementById('student-class').value = student.classe;
+            document.getElementById('inscription-fee').value = student.inscriptionFee;
+            
+            // Show photo preview if exists
+            const photoPreview = document.getElementById('photo-preview');
+            if (student.photo) {
+                photoPreview.innerHTML = `
+                    <img src="${student.photo}" alt="Photo de ${student.firstName}">
+                `;
+            } else {
+                photoPreview.innerHTML = '';
+            }
+            
+            app.showModal('student-modal');
+        } catch (error) {
+            console.error('Failed to load student for editing:', error);
+            app.showToast('Erreur lors du chargement de l\'étudiant', 'error');
+        }
+    }
+
+    async deleteStudent(studentId) {
+        if (!confirm('Êtes-vous sûr de vouloir supprimer cet étudiant ? Cette action supprimera également tous ses paiements.')) {
+            return;
+        }
+
+        try {
+            await Database.deleteStudent(studentId);
+            await this.loadStudents();
+            app.showToast('Étudiant supprimé avec succès', 'success');
+            
+            // Update dashboard if needed
+            if (app.components.dashboard) {
+                app.components.dashboard.updateStats();
+            }
+        } catch (error) {
+            console.error('Failed to delete student:', error);
+            app.showToast('Erreur lors de la suppression de l\'étudiant', 'error');
+        }
+    }
+
+    async handleSubmit(event) {
+        event.preventDefault();
+        
+        const photoFile = document.getElementById('student-photo').files[0];
+        
+        try {
+            const studentData = {
+                firstName: document.getElementById('student-firstname').value,
+                lastName: document.getElementById('student-lastname').value,
+                birthDate: document.getElementById('student-birthdate').value,
+                classe: document.getElementById('student-class').value,
+                inscriptionFee: parseFloat(document.getElementById('inscription-fee').value) || 0,
+                photo: this.editingStudent?.photo || '',
+                createdAt: this.editingStudent?.createdAt || new Date().toISOString()
+            };
+
+            // Generate ID for new student
+            if (!this.editingStudent) {
+                studentData.id = Database.generateStudentId(studentData.firstName, studentData.classe);
+            } else {
+                studentData.id = this.editingStudent.id;
+            }
+
+            // Handle photo upload
+            if (photoFile) {
+                studentData.photo = await this.convertToBase64(photoFile);
+            }
+
+            // Validate required fields
+            if (!studentData.firstName || !studentData.lastName || !studentData.birthDate || !studentData.classe) {
+                app.showToast('Veuillez remplir tous les champs obligatoires', 'error');
+                return;
+            }
+
+            // Save student
+            if (this.editingStudent) {
+                await Database.updateStudent(studentData);
+                app.showToast('Étudiant modifié avec succès', 'success');
+            } else {
+                await Database.addStudent(studentData);
+                app.showToast('Étudiant ajouté avec succès', 'success');
+            }
+
+            // Refresh display
+            await this.loadStudents();
+            app.closeModal('student-modal');
+            
+            // Update dashboard stats
+            if (app.components.dashboard) {
+                app.components.dashboard.updateStats();
+            }
+            
+        } catch (error) {
+            console.error('Failed to save student:', error);
+            app.showToast('Erreur lors de l\'enregistrement de l\'étudiant', 'error');
+        }
+    }
+
+    async handlePhotoUpload(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+            app.showToast('Veuillez sélectionner un fichier image', 'error');
+            return;
+        }
+
+        // Validate file size (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            app.showToast('La taille de l\'image ne doit pas dépasser 5MB', 'error');
+            return;
+        }
+
+        try {
+            const base64 = await this.convertToBase64(file);
+            const photoPreview = document.getElementById('photo-preview');
+            photoPreview.innerHTML = `
+                <img src="${base64}" alt="Aperçu de la photo">
+            `;
+        } catch (error) {
+            console.error('Failed to process photo:', error);
+            app.showToast('Erreur lors du traitement de l\'image', 'error');
+        }
+    }
+
+    convertToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+    }
+
+    formatCurrency(amount) {
+        return new Intl.NumberFormat('fr-FR', {
+            style: 'currency',
+            currency: 'GNF',
+            minimumFractionDigits: 0
+        }).format(amount || 0);
+    }
+}
+
+// Payments Component
+class Payments {
+    constructor() {
+        this.payments = [];
+        this.students = [];
+        this.filteredPayments = [];
+        this.currentFilters = {
+            month: '',
+            student: ''
+        };
+    }
+
+    async init() {
+        await this.loadData();
+        this.setupEventListeners();
+        this.populateStudentDropdown();
+        this.displayPayments();
+    }
+
+    async loadData() {
+        try {
+            this.payments = await Database.getAllPayments();
+            this.students = await Database.getAllStudents();
+            this.filteredPayments = [...this.payments];
+        } catch (error) {
+            console.error('Failed to load payments data:', error);
+            app.showToast('Erreur lors du chargement des données', 'error');
+        }
+    }
+
+    setupEventListeners() {
+        // Add payment button
+        document.getElementById('add-payment-btn')?.addEventListener('click', () => {
+            this.showAddPaymentModal();
+        });
+
+        // Filter controls
+        document.getElementById('payment-month-filter')?.addEventListener('change', (e) => {
+            this.currentFilters.month = e.target.value;
+            this.applyFilters();
+        });
+
+        document.getElementById('payment-student-filter')?.addEventListener('change', (e) => {
+            this.currentFilters.student = e.target.value;
+            this.applyFilters();
+        });
+
+        // Set default payment date to today
+        const paymentDateInput = document.getElementById('payment-date');
+        if (paymentDateInput) {
+            paymentDateInput.value = new Date().toISOString().split('T')[0];
+        }
+    }
+
+    showAddPaymentModal() {
+        document.getElementById('payment-form').reset();
+        
+        // Set default date to today
+        const paymentDateInput = document.getElementById('payment-date');
+        if (paymentDateInput) {
+            paymentDateInput.value = new Date().toISOString().split('T')[0];
+        }
+        
+        this.populateStudentDropdown();
+        app.showModal('payment-modal');
+    }
+
+    populateStudentDropdown() {
+        const select = document.getElementById('payment-student');
+        if (!select) return;
+
+        select.innerHTML = '<option value="">Sélectionner un étudiant</option>';
+        
+        this.students.forEach(student => {
+            const option = document.createElement('option');
+            option.value = student.id;
+            option.textContent = `${student.firstName} ${student.lastName} (${student.id})`;
+            select.appendChild(option);
+        });
+
+        // Also populate filter dropdown
+        const filterSelect = document.getElementById('payment-student-filter');
+        if (filterSelect) {
+            filterSelect.innerHTML = '<option value="">Tous les étudiants</option>';
+            this.students.forEach(student => {
+                const option = document.createElement('option');
+                option.value = student.id;
+                option.textContent = `${student.firstName} ${student.lastName}`;
+                filterSelect.appendChild(option);
+            });
+        }
+    }
+
+    applyFilters() {
+        this.filteredPayments = this.payments.filter(payment => {
+            let matches = true;
+
+            if (this.currentFilters.month && payment.month !== this.currentFilters.month) {
+                matches = false;
+            }
+
+            if (this.currentFilters.student && payment.studentId !== this.currentFilters.student) {
+                matches = false;
+            }
+
+            return matches;
+        });
+
+        this.displayPayments();
+    }
+
+    displayPayments() {
+        const container = document.getElementById('payments-table');
+        if (!container) return;
+
+        if (this.filteredPayments.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <svg class="icon empty-icon">
+                        <use href="#credit-card"></use>
+                    </svg>
+                    <h3>Aucun paiement trouvé</h3>
+                    <p>Commencez par enregistrer votre premier paiement.</p>
+                    <button class="btn btn-primary" onclick="app.components.payments.showAddPaymentModal()">
+                        <svg class="icon">
+                            <use href="#plus"></use>
+                        </svg>
+                        Enregistrer un paiement
+                    </button>
+                </div>
+            `;
+            return;
+        }
+
+        // Sort payments by date (newest first)
+        const sortedPayments = [...this.filteredPayments].sort((a, b) => 
+            new Date(b.date) - new Date(a.date)
+        );
+
+        container.innerHTML = `
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Étudiant</th>
+                        <th>Montant</th>
+                        <th>Mois</th>
+                        <th>Motif</th>
+                        <th>Date de paiement</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${sortedPayments.map(payment => this.createPaymentRow(payment)).join('')}
+                </tbody>
+            </table>
+        `;
+    }
+
+    createPaymentRow(payment) {
+        const student = this.students.find(s => s.id === payment.studentId);
+        const studentName = student ? `${student.firstName} ${student.lastName}` : 'Étudiant inconnu';
+        const formattedAmount = this.formatCurrency(payment.amount);
+        const formattedDate = new Date(payment.date).toLocaleDateString('fr-FR');
+
+        return `
+            <tr data-payment-id="${payment.id}">
+                <td>
+                    <div class="student-info">
+                        <strong>${studentName}</strong>
+                        ${student ? `<br><small style="color: var(--text-secondary);">${student.id}</small>` : ''}
+                    </div>
+                </td>
+                <td>
+                    <strong class="amount">${formattedAmount}</strong>
+                </td>
+                <td>
+                    <span style="padding: 0.25rem 0.5rem; background: var(--primary-light); color: var(--primary); border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600;">${payment.month}</span>
+                </td>
+                <td>${payment.reason}</td>
+                <td>${formattedDate}</td>
+                <td>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button class="btn btn-secondary btn-small" onclick="app.components.payments.editPayment('${payment.id}')" title="Modifier">
+                            <svg class="icon">
+                                <use href="#edit"></use>
+                            </svg>
+                        </button>
+                        <button class="btn btn-danger btn-small" onclick="app.components.payments.deletePayment('${payment.id}')" title="Supprimer">
+                            <svg class="icon">
+                                <use href="#trash"></use>
+                            </svg>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    }
+
+    async handleSubmit(event) {
+        event.preventDefault();
+        
+        try {
+            const paymentData = {
+                id: Database.generatePaymentId(),
+                studentId: document.getElementById('payment-student').value,
+                amount: parseFloat(document.getElementById('payment-amount').value) || 0,
+                month: document.getElementById('payment-month').value,
+                reason: document.getElementById('payment-reason').value,
+                date: document.getElementById('payment-date').value,
+                createdAt: new Date().toISOString()
+            };
+
+            // Validate required fields
+            if (!paymentData.studentId || !paymentData.amount || !paymentData.month || 
+                !paymentData.reason || !paymentData.date) {
+                app.showToast('Veuillez remplir tous les champs obligatoires', 'error');
+                return;
+            }
+
+            // Validate amount
+            if (paymentData.amount <= 0) {
+                app.showToast('Le montant doit être supérieur à zéro', 'error');
+                return;
+            }
+
+            // Check if student exists
+            const student = this.students.find(s => s.id === paymentData.studentId);
+            if (!student) {
+                app.showToast('Étudiant sélectionné non valide', 'error');
+                return;
+            }
+
+            // Save payment
+            await Database.addPayment(paymentData);
+            
+            // Refresh data and display
+            await this.loadData();
+            this.applyFilters();
+            
+            app.closeModal('payment-modal');
+            app.showToast('Paiement enregistré avec succès', 'success');
+            
+            // Update dashboard stats
+            if (app.components.dashboard) {
+                app.components.dashboard.updateStats();
+            }
+            
+        } catch (error) {
+            console.error('Failed to save payment:', error);
+            app.showToast('Erreur lors de l\'enregistrement du paiement', 'error');
+        }
+    }
+
+    async deletePayment(paymentId) {
+        if (!confirm('Êtes-vous sûr de vouloir supprimer ce paiement ?')) {
+            return;
+        }
+
+        try {
+            await Database.deletePayment(paymentId);
+            await this.loadData();
+            this.applyFilters();
+            app.showToast('Paiement supprimé avec succès', 'success');
+            
+            // Update dashboard stats
+            if (app.components.dashboard) {
+                app.components.dashboard.updateStats();
+            }
+        } catch (error) {
+            console.error('Failed to delete payment:', error);
+            app.showToast('Erreur lors de la suppression du paiement', 'error');
+        }
+    }
+
+    formatCurrency(amount) {
+        return new Intl.NumberFormat('fr-FR', {
+            style: 'currency',
+            currency: 'GNF',
+            minimumFractionDigits: 0
+        }).format(amount || 0);
+    }
+
+    async refreshData() {
+        await this.loadData();
+        this.applyFilters();
+    }
+}
+
+// Settings Component
+class Settings {
+    constructor() {
+        this.settings = {
+            language: 'fr',
+            theme: 'light',
+            notifications: true
+        };
+    }
+
+    async init() {
+        await this.loadSettings();
+        this.setupEventListeners();
+        this.updateUI();
+    }
+
+    async loadSettings() {
+        try {
+            this.settings = await Database.getSettings();
+        } catch (error) {
+            console.error('Failed to load settings:', error);
+            // Use default settings
+            this.settings = {
+                language: 'fr',
+                theme: 'light',
+                notifications: true
+            };
+        }
+    }
+
+    setupEventListeners() {
+        // Language selector
+        const languageSelect = document.getElementById('language-select');
+        if (languageSelect) {
+            languageSelect.addEventListener('change', async (e) => {
+                await this.updateLanguage(e.target.value);
+            });
+        }
+
+        // Theme radio buttons
+        document.querySelectorAll('input[name="theme"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    this.updateTheme(e.target.value);
+                }
+            });
+        });
+
+        // Notifications toggle
+        const notificationsToggle = document.getElementById('notifications-toggle');
+        if (notificationsToggle) {
+            notificationsToggle.addEventListener('change', (e) => {
+                this.updateNotifications(e.target.checked);
+            });
+        }
+
+        // Update offline status
+        this.updateOfflineStatus();
+    }
+
+    updateUI() {
+        // Set language selector
+        const languageSelect = document.getElementById('language-select');
+        if (languageSelect) {
+            languageSelect.value = this.settings.language || 'fr';
+        }
+
+        // Set theme radio buttons
+        const themeRadio = document.querySelector(`input[name="theme"][value="${this.settings.theme || 'light'}"]`);
+        if (themeRadio) {
+            themeRadio.checked = true;
+        }
+
+        // Set notifications toggle
+        const notificationsToggle = document.getElementById('notifications-toggle');
+        if (notificationsToggle) {
+            notificationsToggle.checked = this.settings.notifications !== false;
+        }
+    }
+
+    async updateLanguage(language) {
+        try {
+            this.settings.language = language;
+            await this.saveSettings();
+            
+            // Apply language change
+            await app.applyLanguage(language);
+            
+            app.showToast('Langue mise à jour', 'success');
+        } catch (error) {
+            console.error('Failed to update language:', error);
+            app.showToast('Erreur lors de la mise à jour de la langue', 'error');
+        }
+    }
+
+    updateTheme(theme) {
+        try {
+            this.settings.theme = theme;
+            this.saveSettings();
+            
+            // Apply theme change
+            app.applyTheme(theme);
+            
+            app.showToast('Thème mis à jour', 'success');
+        } catch (error) {
+            console.error('Failed to update theme:', error);
+            app.showToast('Erreur lors de la mise à jour du thème', 'error');
+        }
+    }
+
+    updateNotifications(enabled) {
+        try {
+            this.settings.notifications = enabled;
+            this.saveSettings();
+            
+            if (enabled) {
+                app.showToast('Notifications activées', 'success');
+            } else {
+                app.showToast('Notifications désactivées', 'success');
+            }
+        } catch (error) {
+            console.error('Failed to update notifications:', error);
+            app.showToast('Erreur lors de la mise à jour des notifications', 'error');
+        }
+    }
+
+    updateOfflineStatus() {
+        const offlineStatus = document.getElementById('offline-status');
+        if (offlineStatus) {
+            const isOffline = !navigator.onLine;
+            offlineStatus.textContent = isOffline ? 'Hors ligne' : 'En ligne';
+            offlineStatus.style.color = isOffline ? 'var(--warning)' : 'var(--success)';
+        }
+    }
+
+    async saveSettings() {
+        try {
+            await Database.updateSettings(this.settings);
+        } catch (error) {
+            console.error('Failed to save settings:', error);
+            throw error;
+        }
+    }
+}
+
+// Main Application Controller
+class App {
+    constructor() {
+        this.currentPage = 'dashboard';
+        this.currentLanguage = 'fr';
+        this.currentTheme = 'light';
+        this.isOffline = !navigator.onLine;
+        
+        this.components = {
+            dashboard: null,
+            students: null,
+            payments: null,
+            settings: null
+        };
+        
+        this.init();
+    }
+
+    async init() {
+        try {
+            // Initialize database
+            await Database.init();
+            
+            // Load settings
+            await this.loadSettings();
+            
+            // Initialize components
+            this.initComponents();
+            
+            // Setup event listeners
+            this.setupEventListeners();
+            
+            // Apply initial theme and language
+            this.applyTheme(this.currentTheme);
+            await this.applyLanguage(this.currentLanguage);
+            
+            // Show initial page
+            this.showPage(this.currentPage);
+            
+            // Update offline status
+            this.updateOfflineStatus();
+            
+            console.log('Application initialized successfully');
+        } catch (error) {
+            console.error('Failed to initialize application:', error);
+            this.showToast('Erreur lors de l\'initialisation de l\'application', 'error');
+        }
+    }
+
+    async loadSettings() {
+        try {
+            const settings = await Database.getSettings();
+            this.currentLanguage = settings.language || 'fr';
+            this.currentTheme = settings.theme || 'light';
+        } catch (error) {
+            console.error('Failed to load settings:', error);
+            // Use defaults
+            this.currentLanguage = 'fr';
+            this.currentTheme = 'light';
+        }
+    }
+
+    initComponents() {
+        this.components.dashboard = new Dashboard();
+        this.components.students = new Students();
+        this.components.payments = new Payments();
+        this.components.settings = new Settings();
+    }
+
+    setupEventListeners() {
+        // Navigation
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const page = e.target.dataset.page;
+                if (page) {
+                    this.showPage(page);
+                }
+            });
+        });
+
+        // Theme toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                this.toggleTheme();
+            });
+        }
+
+        // Modal controls
+        document.addEventListener('click', (e) => {
+            if (e.target.dataset.close) {
+                this.closeModal(e.target.dataset.close);
+            }
+            
+            if (e.target.closest('.modal') && !e.target.closest('.modal-content')) {
+                const modal = e.target.closest('.modal');
+                this.closeModal(modal.id);
+            }
+
+            // Quick actions
+            if (e.target.dataset.action) {
+                this.handleQuickAction(e.target.dataset.action);
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                this.closeAllModals();
+            }
+        });
+
+        // Online/offline status
+        window.addEventListener('online', () => {
+            this.isOffline = false;
+            this.updateOfflineStatus();
+            this.showToast('Connexion rétablie', 'success');
+        });
+
+        window.addEventListener('offline', () => {
+            this.isOffline = true;
+            this.updateOfflineStatus();
+            this.showToast('Mode hors ligne activé', 'warning');
+        });
+
+        // Form submissions
+        document.getElementById('student-form')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.components.students.handleSubmit(e);
+        });
+
+        document.getElementById('payment-form')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.components.payments.handleSubmit(e);
+        });
+    }
+
+    showPage(pageId) {
+        // Update navigation
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.dataset.page === pageId) {
+                btn.classList.add('active');
+            }
+        });
+
+        // Show page
+        document.querySelectorAll('.page').forEach(page => {
+            page.classList.remove('active');
+        });
+        
+        const targetPage = document.getElementById(`${pageId}-page`);
+        if (targetPage) {
+            targetPage.classList.add('active');
+            this.currentPage = pageId;
+            
+            // Initialize page component
+            if (this.components[pageId]) {
+                this.components[pageId].init();
+            }
+        }
+    }
+
+    showModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // Focus first input
+            const firstInput = modal.querySelector('input, select, textarea');
+            if (firstInput) {
+                setTimeout(() => firstInput.focus(), 100);
+            }
+        }
+    }
+
+    closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            
+            // Reset form if present
+            const form = modal.querySelector('form');
+            if (form) {
+                form.reset();
+                
+                // Clear photo preview
+                const photoPreview = modal.querySelector('#photo-preview');
+                if (photoPreview) {
+                    photoPreview.innerHTML = '';
+                }
+            }
+        }
+    }
+
+    closeAllModals() {
+        document.querySelectorAll('.modal.active').forEach(modal => {
+            this.closeModal(modal.id);
+        });
+    }
+
+    handleQuickAction(action) {
+        switch (action) {
+            case 'add-student':
+                this.showModal('student-modal');
+                break;
+            case 'add-payment':
+                this.showModal('payment-modal');
+                // Populate student dropdown
+                this.components.payments.populateStudentDropdown();
+                break;
+        }
+    }
+
+    toggleTheme() {
+        const newTheme = this.currentTheme === 'light' ? 'dark' : 'light';
+        this.applyTheme(newTheme);
+        this.saveSettings();
+    }
+
+    applyTheme(theme) {
+        this.currentTheme = theme;
+        document.body.className = `${theme}-theme`;
+        
+        // Update theme toggle icon
+        const themeToggle = document.getElementById('theme-toggle');
+        const icon = themeToggle?.querySelector('use');
+        if (icon) {
+            icon.setAttribute('href', `#${theme === 'light' ? 'moon' : 'sun'}`);
+        }
+    }
+
+    async applyLanguage(language) {
+        this.currentLanguage = language;
+        await Translations.apply(language);
+    }
+
+    updateOfflineStatus() {
+        const indicator = document.getElementById('offline-indicator');
+        const icon = indicator?.querySelector('use');
+        
+        if (icon) {
+            if (this.isOffline) {
+                icon.setAttribute('href', '#wifi-off');
+                indicator.title = 'Hors ligne';
+                indicator.style.color = 'var(--warning)';
+            } else {
+                icon.setAttribute('href', '#wifi');
+                indicator.title = 'En ligne';
+                indicator.style.color = 'var(--success)';
+            }
+        }
+    }
+
+    async saveSettings() {
+        try {
+            await Database.updateSettings({
+                language: this.currentLanguage,
+                theme: this.currentTheme,
+                notifications: true // Default value
+            });
+        } catch (error) {
+            console.error('Failed to save settings:', error);
+        }
+    }
+
+    showToast(message, type = 'info', duration = 5000) {
+        const container = document.getElementById('toast-container');
+        if (!container) return;
+
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        
+        const iconMap = {
+            success: 'check-circle',
+            error: 'x-circle',
+            warning: 'alert-triangle',
+            info: 'info'
+        };
+
+        toast.innerHTML = `
+            <svg class="toast-icon icon">
+                <use href="#${iconMap[type] || 'info'}"></use>
+            </svg>
+            <div class="toast-content">${message}</div>
+            <button class="toast-close">
+                <svg class="icon">
+                    <use href="#x"></use>
+                </svg>
+            </button>
+        `;
+
+        // Close button functionality
+        toast.querySelector('.toast-close').addEventListener('click', () => {
+            toast.remove();
+        });
+
+        container.appendChild(toast);
+
+        // Auto remove after duration
+        setTimeout(() => {
+            if (toast.parentElement) {
+                toast.remove();
+            }
+        }, duration);
+    }
+}
+
+// Initialize application when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    window.app = new App();
+});
+    </script>
+</body>
+</html>
